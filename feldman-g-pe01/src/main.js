@@ -17,6 +17,7 @@ window.onload = () => {
     text = document.querySelector(`#output`);
     button = document.querySelector(`#myButton`);
     button.addEventListener(`click`, makeText);
+    makeText();
 }
 
 const makeText = () => {
