@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greeter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: "Special Gothic Condensed One", sans-serif;
+      font-size: 1.5em;
+    }
+
+    button {
+      width: 150px;
+      height: 50px;
+      font-size: 14pt;
+    }
+
+    #input-shoutify {
+      width: auto;
+    }
+
+    #label-shoutify {
+      font-size: 18pt;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    div {
+      width: 50%;
+    }
+
+    #div_btns {
+      padding-bottom: 50px;
+      margin-bottom: 50px;
+      border-bottom: 3px solid black;
+      width: 100%;
+    }
+
+    #inputs {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    input {
+      width: 49%;
+    }
+
+    @media (width >=1024px) {
+      body {
+        background-color: red;
+        padding: 100px;
+      }
+
+      #div_btns {
+        border-bottom: 3px solid white;
+      }
+    }
+  </style>
+  <script>
+    // Variables
+    let hello;
+    let goodbye;
+    let shoutify;
+    let firstName;
+    let lastName;
+    let message;
+
+    // When page is done loading, get items, add events and do some styling (as per assignment requirements)
+    window.onload = () => {
+      // Getting items
+      hello = document.querySelector(`#btn-hello`);
+      goodbye = document.querySelector(`#btn-goodbye`);
+      shoutify = document.querySelector(`#input-shoutify`);
+      firstName = document.querySelector(`#input-firstname`);
+      lastName = document.querySelector(`#input-lastname`);
+      message = document.querySelector(`#output`);
+      // Adding events
+      hello.addEventListener(`click`, () => greet("Hello "));
+      goodbye.addEventListener(`click`, () => greet("Goodbye "));
+      // Styling
+      message.style.color = `red`;
+      message.style.backgroundColor = `yellow`;
+    }
+
+    // Get inputs, trim, use defaults if required, check for shoutify and output to text
+    const greet = (greeting) => {
+      // Take inputs, trim and use default if empty
+      let firstNameValue = firstName.value.trim();
+      if (firstNameValue.length < 1) {
+        firstNameValue = "Peter";
+      }
+      let lastNameValue = lastName.value.trim();
+      if (lastNameValue.length < 1) {
+        lastNameValue = "Coder";
+      }
+      let result = greeting + firstNameValue + " " + lastNameValue;
+      // Make uppercase if shoutify is selected
+      if (shoutify.checked) {
+        result = result.toUpperCase();
+      }
+      // Output to text
+      message.textContent = result;
+    }
+  </script>
+</head>
+
+<body>
+  <div id="div_btns">
+    <button id="btn-hello">Say Hello</button>
+    <button id="btn-goodbye">Say Goodbye</button>
+    <input type="checkbox" id="input-shoutify">
+    <label for="checkbox" id="label-shoutify">Shoutify!</label>
+  </div>
+  <div id="inputs">
+    <input id="input-firstname" placeholder="Type in your first name">
+    <input id="input-lastname" placeholder="Type in your last name">
+  </div>
+  <p id="output">???</p>
+</body>
+
+</html>
