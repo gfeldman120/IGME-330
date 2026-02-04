@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Fetch - Load JSON</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Fetch - Load JSON File</h2>
+    <p>The <code>pet-names.JSON</code> file contains popular dog and cat pet names on separate lines, separated by
+        commas.</p>
+    <p>Note that because fetch is loading a local file, this example will have to be run off a web server rather than
+        from your computer's hard drive (e.g. banjo.rit.edu or VSCode's liveserver etc)</p>
+
+    <hr>
+    <button id="my-button">Load Data</button>
+    <p id="output">Click button to load</p>
+
+    <script>
+        const loadJSONFile = () => {
+            fetch('./data/pet-names.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+
+                    // TODO: You implement the parsing and display code here!
+                    // See step-by-step instructions below
+                    let dogNames = data.categories.dogs;
+                    let catNames = data.categories.cats;
+                    let birdNames = data.categories.birds;
+
+                    // Create HTML for dog names
+                    let dogList = ``;
+                    let catList = ``;
+                    let birdList = ``;
+                    for (let i = 0; i < dogNames.length; i++) {
+                        dogList += `<li>${dogNames[i]}</li>`;
+                    }
+                    for (let i = 0; i < catNames.length; i++) {
+                        catList += `<li>${catNames[i]}</li>`;
+                    }
+                    for (let i = 0; i < birdNames.length; i++) {
+                        birdList += `<li>${birdNames[i]}</li>`;
+                    }
+                    const dogHTML = `<h3>Dog Names</h3><ol>${dogList}</ol>`;
+
+                    const catHTML = `<h3>Cat Names</h3><ol>${catList}</ol>`;
+
+                    const birdHTML = `<h3>Bird Names</h3><ol>${birdList}</ol>`;
+
+                    // Display the HTML on the page
+                    document.querySelector('#output').innerHTML = dogHTML + catHTML + birdHTML;
+                })
+        };
+
+        document.querySelector('#my-button').addEventListener('click', loadJSONFile);
+    </script>
+</body>
+
+</html>
