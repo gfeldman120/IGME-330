@@ -16,7 +16,7 @@ button {
     font-size: 15pt;
 }
 
-#fiveButton {
+#btn-gen-5 {
     display: none;
 }
 
@@ -99,7 +99,7 @@ button {
 }
 
 @media only screen and (min-width: 1408px) {
-    #fiveButton {
+    #btn-gen-5 {
         display: inline;
     }
 }
