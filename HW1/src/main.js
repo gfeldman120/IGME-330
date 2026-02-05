@@ -18,12 +18,12 @@ window.onload = () => {
     text = document.querySelector(`#output`);
     button = document.querySelector(`#myButton`);
     fiveButton = document.querySelector(`#fiveButton`);
-    button.addEventListener(`click`, () => makeText(1));
-    fiveButton.addEventListener(`click`, () => makeText(5));
-    makeText(1);
+    button.addEventListener(`click`, () => generateTechno(1));
+    fiveButton.addEventListener(`click`, () => generateTechno(5));
+    generateTechno(1);
 }
 
-const makeText = (count) => {
+const generateTechno = (count) => {
     let result = "";
     for (let i = 0; i < count; i++) {
         for (let j = 0; j < wordsArrays.length; j++) {
