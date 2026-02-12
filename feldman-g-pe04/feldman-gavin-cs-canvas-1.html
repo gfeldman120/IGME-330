@@ -41,12 +41,12 @@
         const demo = () => {
             let canvas = document.querySelector(`canvas`);
             let ctx = canvas.getContext(`2d`);
-            // Green base rectangle
-            ctx.fillStyle = `rgb(0, 255, 0)`;
+            // Yellow base rectangle
+            ctx.fillStyle = `yellow`;
             ctx.fillRect(120, 120, 400, 300);
-            // Transparent blue outline
-            ctx.strokeStyle = `rgba(0, 0, 255, 0.5)`;
-            ctx.lineWidth = 50;
+            // Magenta outline
+            ctx.strokeStyle = `magenta`;
+            ctx.lineWidth = 10;
             ctx.strokeRect(120, 120, 400, 300);
         }
 
