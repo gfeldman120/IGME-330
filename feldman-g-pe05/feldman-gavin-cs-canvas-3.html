@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>First Canvas</title>
+    <style>
+        canvas {
+            border: 1px solid gray;
+        }
+    </style>
+    <script>
+        "use strict";
+
+        let canvas;
+        let ctx;
+
+        window.onload = init;
+
+        function init() {
+            canvas = document.querySelector("canvas");
+            ctx = canvas.getContext("2d");
+            update();
+        }
+
+        // handy helper functions!
+        function getRandomColor() {
+            function getByte() {
+                return 55 + Math.round(Math.random() * 200);
+            }
+            return "rgba(" + getByte() + "," + getByte() + "," + getByte() + ",.8)";
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        const drawRandomRect = (ctx) => {
+            let x = getRandomInt(0, 800);
+            let y = getRandomInt(0, 800);
+            let width = getRandomInt(0, 100);
+            if (x + width > 800) {
+                width = 800 - x;
+            }
+            let height = getRandomInt(0, 100);
+            if (y + height > 800) {
+                height = 800 - y;
+            }
+            ctx.fillStyle = getRandomColor();
+            ctx.fillRect(x, y, width, height);
+        }
+
+        const update = () => {
+            requestAnimationFrame(update);
+            drawRandomRect(ctx);
+        }
+
+    </script>
+</head>
+
+<body>
+    <canvas width="800" height="800">
+        Get a real browser!
+    </canvas>
+</body>
+
+</html>
