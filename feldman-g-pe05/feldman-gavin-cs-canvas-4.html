@@ -3,14 +3,29 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Screen Saver</title>
+    <title>Screen Saver 2</title>
     <style>
         canvas {
             border: 1px solid gray;
         }
+
+        body {
+            font-family: sans-serif;
+        }
+
+        button {
+            font-size: 1.2em;
+        }
+
+        section {
+            margin: .5em 0 .5em 0;
+        }
     </style>
     <script>
         "use strict";
+
+        let paused = false;
+        let createRectangles = true;
 
         let canvas;
         let ctx;
@@ -20,6 +35,7 @@
         function init() {
             canvas = document.querySelector("canvas");
             ctx = canvas.getContext("2d");
+            setupUI();
             ctx.save();
             ctx.fillStyle = `black`;
             ctx.fillRect(0, 0, 800, 800);
@@ -40,7 +56,6 @@
         }
 
         const drawRandomRect = (a) => {
-            ctx.save();
             let x = getRandomInt(-99, 800);
             let y = getRandomInt(-99, 800);
             let width = getRandomInt(0, 100);
@@ -57,9 +72,9 @@
             else if (y + height < 0) {
                 height = 100;
             }
-            ctx.fillStyle = getRandomColor(a);
-            ctx.fillRect(x, y, width, height);
-            ctx.restore();
+            let color = getRandomColor(a);
+            let lineWidth = getRandomInt(0, 20);
+            drawRectangle(ctx, x, y, width, height, color, lineWidth, color);
         }
 
         const drawRandomLine = (a) => {
@@ -106,18 +121,72 @@
             ctx.restore();
         }
 
+        function canvasClicked(e) {
+            let rect = e.target.getBoundingClientRect();
+            let mouseX = e.clientX - rect.x;
+            let mouseY = e.clientY - rect.y;
+            console.log(mouseX, mouseY);
+            for (let i = 0; i < 10; i++) {
+                drawRectangle(
+                    ctx,
+                    mouseX + getRandomInt(-25, 25),
+                    mouseY + getRandomInt(-25, 25),
+                    getRandomInt(10, 50),
+                    getRandomInt(10, 50),
+                    getRandomColor(1),
+                    getRandomInt(1, 10),
+                    getRandomColor(1)
+                );
+            }
+        }
+
+        const setupUI = () => {
+            let play = document.querySelector(`#btnPlay`);
+            let pause = document.querySelector(`#btnPause`);
+            let rectangleBox = document.querySelector(`#cbRectangles`);
+            play.addEventListener(`click`, () => {
+                if (paused) {
+                    paused = false;
+                    update();
+                }
+            });
+            pause.addEventListener(`click`, () => {
+                paused = true;
+            })
+            canvas.addEventListener(`click`, canvasClicked);
+            rectangleBox.addEventListener(`click`, () => {
+                createRectangles = rectangleBox.checked;
+            });
+            createRectangles = rectangleBox.checked;
+        }
+
+        const drawRectangle = (ctx, x, y, w, h, fillColor = "black", lineWidth = 0, strokeColor = "black") => {
+            ctx.save();
+            ctx.fillStyle = fillColor;
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = lineWidth;
+            ctx.beginPath();
+            ctx.rect(x, y, w, h);
+            ctx.stroke();
+            ctx.closePath();
+            ctx.restore();
+        }
+
         const update = () => {
+            if (paused) {
+                return;
+            }
             let a = getRandomInt(1, 10) / 50.0;
-            switch (getRandomInt(0, 2)) {
-                case 0:
-                    drawRandomRect(a);
-                    break;
-                case 1:
-                    drawRandomLine(a);
-                    break;
-                case 2:
-                    drawRandomCircle(a);
-                    break;
+            let choice = getRandomInt(0, 2);
+            if (choice == 0 && createRectangles) {
+                drawRandomRect(a);
+            }
+            else if (choice == 1) {
+                drawRandomLine(a);
+            }
+            else {
+                drawRandomCircle(a);
             }
             requestAnimationFrame(update);
         }
@@ -129,6 +198,19 @@
     <canvas width="800" height="800">
         Get a real browser!
     </canvas>
+    <section>
+        <button id="btnPlay">Play</button>
+        <button id="btnPause">Pause</button>
+    </section>
+    <section>
+        <span>
+            <input type="checkbox" id="cbRectangles" checked>
+            <label for="cbRectangles">Rectangles</label>
+        </span>
+    </section>
+    <section>
+        <p>Click on the screen to "spraypaint" rectangles (you probably want the screensaver to be paused)</p>
+    </section>
 </body>
 
 </html>
