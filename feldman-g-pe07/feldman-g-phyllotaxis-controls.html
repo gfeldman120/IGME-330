@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<title>AlgorithmispacingBotany</title>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+	<script>
+		"use strict";
+
+		window.onload = init;
+
+		const canvasWidth = 400, canvasHeight = 300;
+		let ctx;
+		let divergence = 137.5;
+		let resetButton;
+		let divergenceSelection;
+		let colorSelection;
+		let radiusSelection;
+		// Magic numbers (some are local in "loop")
+		let fps = 60;
+		let colorSmoothness = 1;
+		let radius = 4;
+		const spacing = 4;
+		let iterator = 0;
+
+		function init() {
+			ctx = canvas.getContext("2d");
+			canvas.width = canvasWidth;
+			canvas.height = canvasHeight;
+			ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+			resetButton = document.querySelector(`#btn-restart`);
+			resetButton.addEventListener(`click`, reset);
+			divergenceSelection = document.querySelector(`#ctrl-divergence`);
+			divergenceSelection.addEventListener(`change`, divergenceValueChanged);
+			colorSelection = document.querySelector(`#ctrl-color`);
+			colorSelection.addEventListener(`change`, colorValueChanged);
+			radiusSelection = document.querySelector(`#ctrl-radius`);
+			radiusSelection.addEventListener(`change`, radiusValueChanged);
+			loop();
+		}
+
+		const loop = () => {
+			setTimeout(loop, 1000/fps);
+
+			let angle = iterator * dtr(divergence);
+			let radiusFromCenter = spacing * Math.sqrt(iterator);
+			// console.log(a, r);
+			let x = radiusFromCenter * Math.cos(angle) + canvasWidth / 2;
+			let y = radiusFromCenter * Math.sin(angle) + canvasHeight / 2;
+			// console.log(x, y);
+			// let aDegrees = (n/colorSmoothness * divergence) % 256;
+			// let color = `rgb(${aDegrees},0,255)`;
+			let color = `hsl(${iterator / colorSmoothness % 361},100%,50%)`;
+			drawCircle(ctx, x, y, radius, color);
+
+			iterator++;
+		}
+
+		const reset = () => {
+			iterator = 0;
+			ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+		}
+
+		const divergenceValueChanged = () => {
+			divergence = parseFloat(divergenceSelection.value);
+			// console.log(divergence);
+		}
+
+		const colorValueChanged = () => {
+			colorSmoothness = parseFloat(colorSelection.value);
+		}
+
+		const radiusValueChanged = () => {
+			radius = parseFloat(radiusSelection.value);
+		}
+
+		// helpers
+		function dtr(degrees) {
+			return degrees * (Math.PI / 180);
+		}
+
+		function drawCircle(ctx, x, y, radius, color) {
+			ctx.save();
+			ctx.fillStyle = color;
+			ctx.beginPath();
+			ctx.arc(x, y, radius, 0, Math.PI * 2);
+			ctx.closePath();
+			ctx.fill();
+			ctx.restore();
+		}
+
+	</script>
+</head>
+
+<body>
+	<canvas id="canvas"></canvas>
+	<div id="controls">
+		<label>Divergence Angle</label>
+		<select id="ctrl-divergence">
+			<option value="137.1">137.1</option>
+			<option value="137.3">137.3</option>
+			<option value="137.5" selected>137.5</option>
+			<option value="137.7">137.7</option>
+			<option value="137.7">137.9</option>
+		</select>
+		<br>
+		<label>Color Change Speed</label>
+		<select id="ctrl-color">
+			<option value="0.25">Very Fast</option>
+			<option value="1">Fast</option>
+			<option value="1.75" selected>Average</option>
+			<option value="2.5">Slow</option>
+			<option value="3.25">Very Slow</option>
+		</select>
+		<br>
+		<label>Radius</label>
+		<select id="ctrl-radius">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="4" selected>4</option>
+			<option value="6">6</option>
+			<option value="8">8</option>
+			<option value="10">10</option>
+		</select>
+		<br>
+		<button id="btn-restart">Restart App</button>
+		<div>
+			<h1>Changes</h1>
+			<ul>
+				<li>Pulldown allows change of divergence angle</li>
+				<li>Pulldown allows change of color change speed/smoothness</li>
+				<li>Pulldown allows change of radius</li>
+			</ul>
+		</div>
+	</div>
+</body>
+
+</html>
